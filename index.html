@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/script.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <form>
+        <p>
+            <label for="txt_senha">Senha:</label>
+            <input type="password" placeholder="Informe a senha" id="txt_senha" />
+        </p>
+        <p>
+            <label for="txt_confirma">Confirmar Senha:</label>
+            <input type="password" placeholder="Confirme a senha" id="txt_confirma" />
+        </p>
+        <p>
+            <button onclick="return validar()">Validar</button>
+        </p>
+        <p id="p_mensagem">
+        </p>
+    </form>
+</body>
+</html>
