@@ -1,4 +1,20 @@
+/* Ampliando a tag de mensagem */
 #p_mensagem{
+    font-size: 1.5em;
+}
+
+/* Mensagem em vermelho e texto negrito, usada quando tiver erro */
+.erro{
     color: red;
     font-weight: bold;
+}
+
+/* Mensagem em azul e texto itálico, usada quando estiver correto */
+.correto{
+    color: blue;
+    font-style: italic;
+}
+
+#p_lista_apelido{
+    display: none;
 }

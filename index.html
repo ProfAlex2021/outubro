@@ -4,24 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- Tag para iniciar os comandos de JavaScript (externo) -->
     <script src="js/script.js"></script>
+    <!-- Tag para iniciar as declarações de CSS (externo) -->
     <link href="css/style.css" rel="stylesheet" />
 </head>
 <body>
+    <!-- Formulário para entrada de dados -->
     <form>
         <p>
+            <!-- Label e caixa de texto para receber o nome do usuário -->
+            <label for="txt_nome">Nome:</label>
+            <!-- A propriedade "required" define que o campo deve estar preenchido antes de enviar -->
+            <input type="text" placeholder="Informe seu nome" id="txt_nome" required />
+        </p>
+        <p>
+            <!-- Label e caixa de texto para receber o e-mail do usuário -->
+            <label for="txt_email">E-mail:</label>
+            <input type="email" placeholder="Informe o seu e-mail" id="txt_email" />
+        </p>
+        <p>
+            <!-- Label e caixa de texto para repetir e confirmar o e-mail do usuário -->
+            <label for="txt_email_confirma">Confirmar E-mail:</label>
+            <input type="email" placeholder="Confirme o seu e-mail" id="txt_email_confirma" required />
+        </p>
+        <p>
+            <!-- Label e caixa de texto para receber o celular do usuário -->
+            <label for="txt_celular">Celular:</label>
+            <input type="tel" placeholder="Informe o celular" id="txt_celular" />
+        </p>
+        <p>
+            <!-- Label e caixa de texto para repetir e confirmar o celular do usuário -->
+            <label for="txt_celular_confirma">Confirmar Celular:</label>
+            <input type="tel" placeholder="Confirme o celular" id="txt_celular_confirma" required />
+        </p>
+        <p>
+            <!-- Label e caixa de texto para receber senha do usuário -->
             <label for="txt_senha">Senha:</label>
             <input type="password" placeholder="Informe a senha" id="txt_senha" />
         </p>
         <p>
+            <!-- Label e caixa de texto para repetir e confirmar a senha do usuário -->
             <label for="txt_confirma">Confirmar Senha:</label>
-            <input type="password" placeholder="Confirme a senha" id="txt_confirma" />
+            <input type="password" placeholder="Confirme a senha" id="txt_confirma" required />
         </p>
         <p>
+            <!-- Botão para validar as caixas de texto -->
             <button onclick="return validar()">Validar</button>
+            <!-- Botão para limpar as caixas de texto e a mensagem de validação -->
+            <input onclick="limpar()" type="reset" value="Limpar" />
         </p>
-        <p id="p_mensagem">
+        <p>
+            <!-- Parágrafo para adcionar apelido na lista de apelidos do usuário -->
+            <label for="txt_apelido">Apelido</label>
+            <input type="text" placeholder="Informe seu apelido" id="txt_apelido" />
+            <!-- Botão para adicionar apelido na lista (exibe a lista ao clicar)-->
+            <input type="button" value="Adicionar" onclick="adicionar_apelido()" />
+        </p>
+        <p id="p_lista_apelido">
+            <!-- Párgrafo de lista de apelidos (oculta quando vazia) -->
+            <label for="lst_apelido">Apelido favorito:</label>
+            <select id="lst_apelido">
+            </select>
+        </p>
+        <p>
+            <!-- Grava o apelido favorito (selecionado) em cookie -->
+            <input type="button" value="Gravar" onclick="gravar_apelido()" />
+            <!-- Carrega o apelido favorito de cookie na lista -->
+            <input type="button" value="Carregar" onclick="carregar_apelido()" />
         </p>
     </form>
+    <!-- Mensagem de validação de formulário -->
+    <p id="p_mensagem">
+    </p>
 </body>
 </html>
