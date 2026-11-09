@@ -1,3 +1,4 @@
+
 //Função para validar as caixas de texto
 function validar(){
     let txt_nome = document.querySelector("#txt_nome");
@@ -14,6 +15,7 @@ function validar(){
     //Cria uma nova tag <ul>
     let lista_tag = document.createElement("ul");
     let item;
+
     //Cria uma nova tag <li>
     item = document.createElement("li");
     //adiciona o texto na tag: <li>E-mail JS</li>
@@ -32,8 +34,69 @@ function validar(){
     lista_tag.appendChild(item);
     //fim da repetição do processo
 
+    //Comparar se o valor das duas caixas de texto estão idênticas
+    lista_tag.innerHTML = "";
+
+    //Verificar nome
+    item = document.createElement("li");
+    if(txt_nome.value.trim() == ""){
+        item.textContent = "Nome está vazio";
+        item.classList.add("erro");
+    }else{
+        item.textContent = "Nome preenchido";
+        item.classList.add("correto");
+    }
+    lista_tag.appendChild(item);
+
+    //Verificar e-mail
+    item = document.createElement("li");
+    if(txt_email.value.trim() == ""){
+        item.textContent = "E-mail está vazio";
+        item.classList.add("erro");
+    }else if(txt_email.value != txt_email_confirma.value){
+        item.textContent = "E-mails são diferentes";
+        item.classList.add("erro");
+        txt_email_confirma.focus();
+    }else{
+        item.textContent = "E-mails estão iguais";
+        item.classList.add("correto");
+    }
+    lista_tag.appendChild(item);
+
+    //Verificar celular
+    item = document.createElement("li");
+    if(txt_celular.value.trim() == ""){
+        item.textContent = "Celular está vazio";
+        item.classList.add("erro");
+    }else if(txt_celular.value != txt_celular_confirma.value){
+        item.textContent = "Celulares são diferentes";
+        item.classList.add("erro");
+        txt_celular_confirma.focus();
+    }else{
+        item.textContent = "Celulares estão iguais";
+        item.classList.add("correto");
+    }
+    lista_tag.appendChild(item);
+
+    //Verificar senha
+    item = document.createElement("li");
+    if(txt_senha.value == ""){
+        item.textContent = "Senha está vazia";
+        item.classList.add("erro");
+    }else if(txt_senha.value != txt_confirma.value){
+        item.textContent = "Senhas são diferentes";
+        item.classList.add("erro");
+        txt_confirma.focus();
+    }else{
+        item.textContent = "Senhas estão iguais";
+        item.classList.add("correto");
+    }
+    lista_tag.appendChild(item);
+
     //Apagando mensagens anteriores
     mensagem.innerHTML = "";
+    mensagem.classList.remove("correto", "erro");
+
     //Adicionando a lista na mensagem
     mensagem.appendChild(lista_tag);
 
@@ -59,7 +122,7 @@ function validar(){
     }
 */
     //Interromper o envio do formulário
-    //return false;
+    return false;
 
     //Exibir cada mensagem de validação de acordo com cada comparação:
     //Se o campo estiver sem texto, Exibir mensagem "[CAMPO] está vazio"
@@ -68,7 +131,9 @@ function validar(){
 }
 
 function limpar(){
+    let mensagem = document.querySelector("#p_mensagem");
     mensagem.innerHTML = "";
+    mensagem.classList.remove("correto", "erro");
 }
 
 function adicionar_apelido(){
@@ -77,6 +142,7 @@ function adicionar_apelido(){
 
     let novo_apelido = document.createElement("option");
     novo_apelido.textContent = txt_apelido;
+    novo_apelido.value = txt_apelido;
     lst_apelido.appendChild(novo_apelido);
 
     let p_lista_apelido = document.querySelector("#p_lista_apelido");
@@ -84,27 +150,74 @@ function adicionar_apelido(){
     p_lista_apelido.style.display = "block";
 
     //no final, limpar a caixa de texto de apelido
+    document.querySelector("#txt_apelido").value = "";
 }
 
-function gravar_apelido(){
-    let apelido = document.querySelector('#lst_apelido option:checked').innerText;
+async function gravar_apelido(){
+    let apelido = document.querySelector('#lst_apelido option:checked');
 
-    cookieStore.set("apelido_favorito", apelido);
+    if(apelido == null){
+        alert("Selecione um apelido");
+        return;
+    }
+
+    apelido = apelido.innerText;
+
+    await cookieStore.set("apelido_favorito", apelido);
     //Gravar todos campos do formulário no cookie
+    await cookieStore.set("nome", document.querySelector("#txt_nome").value);
+    await cookieStore.set("email", document.querySelector("#txt_email").value);
+    await cookieStore.set("celular", document.querySelector("#txt_celular").value);
+
     //Gravar lista de apelidos no cookie
+    let lst_apelido = document.querySelector("#lst_apelido");
+    let lista = [];
+
+    for(let i = 0; i < lst_apelido.options.length; i++){
+        lista.push(lst_apelido.options[i].value);
+    }
+
+    await cookieStore.set("lista_apelidos", JSON.stringify(lista));
 }
 
 async function carregar_apelido(){
-    let apelido = (await cookieStore.get("apelido_favorito")).value;
+    let apelido = await cookieStore.get("apelido_favorito");
 
     let p_lista_apelido = document.querySelector("#p_lista_apelido");
     p_lista_apelido.style.display = "block";
 
     let lst_apelido = document.querySelector("#lst_apelido");
 
+    //Limpar lista anterior
+    lst_apelido.innerHTML = "";
+
     let novo_apelido = document.createElement("option");
-    novo_apelido.textContent = apelido;
-    lst_apelido.appendChild(novo_apelido);
 
     //Carregar lista de apelido
+    let lista_salva = await cookieStore.get("lista_apelidos");
+
+    if(lista_salva){
+        let lista = JSON.parse(lista_salva.value);
+
+        for(let i = 0; i < lista.length; i++){
+            novo_apelido = document.createElement("option");
+            novo_apelido.textContent = lista[i];
+            novo_apelido.value = lista[i];
+            lst_apelido.appendChild(novo_apelido);
+        }
+    }
+
+    //Carregar campos do formulário
+    let nome = await cookieStore.get("nome");
+    let email = await cookieStore.get("email");
+    let celular = await cookieStore.get("celular");
+
+    if(nome) document.querySelector("#txt_nome").value = nome.value;
+    if(email) document.querySelector("#txt_email").value = email.value;
+    if(celular) document.querySelector("#txt_celular").value = celular.value;
+
+    //Selecionar apelido favorito
+    if(apelido){
+        lst_apelido.value = apelido.value;
+    }
 }
